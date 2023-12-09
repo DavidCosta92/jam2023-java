@@ -26,7 +26,7 @@ public class CourseService {
                 .map(addDto -> courseMapper.courseAddDtoTOCourseEntity(addDto))
                 .map(courseEntity -> courseRepository.save(courseEntity))
                 .map(courseEntity -> courseMapper.courseEntityTOCourseReadDto(courseEntity))
-                .orElse(new CourseReadDto());
+                .orElse(new CourseReadDto()); //.orElseThrow(()->new RuntimeException("Error creando cruso?"));
     }
 
     public List<CourseReadDto> showAllCourses (){
