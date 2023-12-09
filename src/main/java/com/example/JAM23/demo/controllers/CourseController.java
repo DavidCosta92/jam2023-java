@@ -3,6 +3,7 @@ package com.example.JAM23.demo.controllers;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.services.CourseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/course")
+@RequiredArgsConstructor
 public class CourseController {
 
     @Autowired
