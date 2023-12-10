@@ -1,5 +1,6 @@
 package com.example.JAM23.demo.services;
 
+import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import com.example.JAM23.demo.mappers.CourseMapper;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
@@ -46,7 +47,8 @@ public class CourseService {
                 .ofNullable(idCourse)
                 .map(course -> courseRepository.findById(idCourse).get())
                 .map(courseEntity -> courseMapper.courseEntityTOCourseReadDto(courseEntity))
-                .orElse(new CourseReadDto());
+                // .orElse(new CourseReadDto());
+                .orElseThrow(()->new NotFoundException("Curso no encontrado por ID: "+idCourse));
     }
 
     public CourseReadDto editCourseById(Integer idCourse, CourseAddDto course){
