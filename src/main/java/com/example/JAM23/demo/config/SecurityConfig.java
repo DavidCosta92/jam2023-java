@@ -39,8 +39,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf-> csrf.disable())
+                //.headers().httpStrictTransportSecurity().maxAgeInSeconds(0).includeSubDomains(true)
+                //.headers().httpStrictTransportSecurity().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/course/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sesionMan->

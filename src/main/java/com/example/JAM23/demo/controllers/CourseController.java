@@ -14,12 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/course")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
     @GetMapping
+    //@CrossOrigin
     public ResponseEntity<List<CourseReadDto>> showAllCourses() {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }
