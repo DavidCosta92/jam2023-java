@@ -4,10 +4,14 @@ import com.example.JAM23.demo.auth.User.Role;
 import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.auth.entities.AuthResponse;
 import com.example.JAM23.demo.auth.entities.LoginRequest;
+import com.example.JAM23.demo.auth.entities.LoguedUserDetails;
 import com.example.JAM23.demo.auth.entities.RegisterRequest;
+import com.example.JAM23.demo.jwt.JwtAuthenticationFilter;
 import com.example.JAM23.demo.jwt.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +28,7 @@ public class AuthService {
     PasswordEncoder passwordEncoder;
     @Autowired
     AuthenticationManager authenticationManager;
+
     /*
     @Autowired
     JwtService jwtService;
@@ -59,5 +64,21 @@ public class AuthService {
                 .token(jwtService.getToken(user))
                 .build();
 
+    }
+
+    public LoguedUserDetails getLoguedUserDetails (HttpHeaders headers){
+        String token = jwtService.getTokenFromHeader(headers);
+        String username = jwtService.getUsernameFromToken(token);
+        User loguedUser = userRepository.findByUsername(username).get();
+
+        return new LoguedUserDetails()
+                .builder()
+                .token(token)
+                .id(loguedUser.getId())
+                .username(username)
+                .firstName(loguedUser.getFirstName())
+                .lastName(loguedUser.getLastName())
+                .country(loguedUser.getCountry())
+                .build();
     }
 }
