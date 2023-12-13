@@ -17,5 +17,8 @@ public class LoguedUserDetails {
     String username;
     String lastName;
     String firstName;
-    String country;
+    String phone;
+    String dni;
+    String email;
+    String gender;
 }

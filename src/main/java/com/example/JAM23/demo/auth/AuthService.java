@@ -55,7 +55,10 @@ public class AuthService {
                 .password(passwordEncoder.encode( request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .country(request.getCountry())
+                .phone(request.getPhone())
+                .dni(request.getDni())
+                .email((request.getEmail()))
+                .gender(request.getGender())
                 .role(Role.USER)
                 .build();
 
@@ -78,7 +81,10 @@ public class AuthService {
                 .username(username)
                 .firstName(loguedUser.getFirstName())
                 .lastName(loguedUser.getLastName())
-                .country(loguedUser.getCountry())
+                .phone(loguedUser.getPhone())
+                .dni(loguedUser.getDni())
+                .email((loguedUser.getEmail()))
+                .gender(loguedUser.getGender())
                 .build();
     }
 }

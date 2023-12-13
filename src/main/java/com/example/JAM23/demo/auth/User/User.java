@@ -11,13 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name ="user" , uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name ="user" , uniqueConstraints = {@UniqueConstraint(columnNames = {"username" , "dni" , "email"})})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -28,8 +27,16 @@ public class User implements UserDetails {
 
     String lastName;
     String firstName;
-    String country;
     String password;
+    String phone;
+
+    @Column(nullable = false)
+    String dni;
+
+    @Column(nullable = false)
+    String email;
+
+    String gender;
 
     @Enumerated(EnumType.STRING) // para obtener el nombre del rol y no el numero de rol
     Role role;
