@@ -1,5 +1,6 @@
 package com.example.JAM23.demo.controllers;
 
+import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.services.CourseService;
@@ -21,7 +22,6 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping
-    //@CrossOrigin
     public ResponseEntity<List<CourseReadDto>> showAllCourses() {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }

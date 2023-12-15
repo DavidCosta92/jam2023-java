@@ -1,5 +1,6 @@
 package com.example.JAM23.demo.auth.User;
 
+import com.example.JAM23.demo.model.entities.CourseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +11,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-@Data
+import java.util.Set;
+
+
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name ="user" , uniqueConstraints = {@UniqueConstraint(columnNames = {"username" , "dni" , "email"})})
+@Entity(name ="user")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username" , "dni" , "email"})})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -40,7 +45,17 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING) // para obtener el nombre del rol y no el numero de rol
     Role role;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "inscripciones",
+            joinColumns = @JoinColumn(name = "id_user_fk", nullable = false), // jpa crea estos atributos automaticamente en las entidades???
+            inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = false)) // jpa crea estos atributos automaticamente en las entidades???
+    private Set<CourseEntity> courses = new HashSet<>();
 
+
+    /*
+    @ManyToMany(mappedBy = "users")
+    private Set<CourseEntity> courses = new HashSet<>();
+*/
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // En este ejemplo, solo retorna el rol de usuario como si fuera un permiso,
