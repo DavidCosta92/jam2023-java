@@ -17,7 +17,7 @@ public class InscriptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    // private Integer id_user; No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
-    // private Integer id_course; No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
+    private Integer id_user_fk; // No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
+    private Integer id_course_fk; // No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
    //  private String role; esto lo saque porque me parece redundante, ya que todos los inscriptos seran si o si estudiantes
 }

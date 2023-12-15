@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/course/**").permitAll()
                         .requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
