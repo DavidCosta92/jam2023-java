@@ -45,17 +45,13 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING) // para obtener el nombre del rol y no el numero de rol
     Role role;
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = CascadeType.ALL, targetEntity = CourseEntity.class)
     @JoinTable(name = "inscripciones",
-            joinColumns = @JoinColumn(name = "id_user_fk", nullable = false), // jpa crea estos atributos automaticamente en las entidades???
-            inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = false)) // jpa crea estos atributos automaticamente en las entidades???
+            joinColumns = @JoinColumn(name = "id_user_fk", nullable = false), // jpa crea estos atributos automaticamente en las entidades
+            inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = false)) // jpa crea estos atributos automaticamente en las entidades
     private Set<CourseEntity> courses = new HashSet<>();
 
-
-    /*
-    @ManyToMany(mappedBy = "users")
-    private Set<CourseEntity> courses = new HashSet<>();
-*/
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // En este ejemplo, solo retorna el rol de usuario como si fuera un permiso,

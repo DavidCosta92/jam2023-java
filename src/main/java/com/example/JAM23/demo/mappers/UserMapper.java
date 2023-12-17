@@ -18,7 +18,6 @@ public class UserMapper {
                     UserReadDto userDto = new UserReadDto();
                     userDto.setId(user.getId());
                     userDto.setUsername(user.getUsername());
-                    userDto.setPassword(user.getPassword());
                     userDto.setFirstName(user.getFirstName());
                     userDto.setLastName(user.getLastName());
                     userDto.setDni(user.getDni());

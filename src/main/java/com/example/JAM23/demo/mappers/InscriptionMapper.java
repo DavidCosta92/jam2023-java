@@ -2,17 +2,22 @@ package com.example.JAM23.demo.mappers;
 
 import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionReadDto;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+
+@Component
 public class InscriptionMapper {
-
-/*
-    public InscriptionReadDto inscriptionEntityToInscriptionReadDto(InscriptionEntity entity){
+    public InscriptionReadDto inscriptionEntityTOInscriptionReadDto(InscriptionEntity inscriptionEntity){
         return Optional
-                .ofNullable(entity)
-                .map(entity1 -> new InscriptionReadDto(entity1.getId() , entity.get))
+                .ofNullable(inscriptionEntity)
+                .map(entity -> {
+                    InscriptionReadDto insc = new InscriptionReadDto();
+                    insc.setId_course(inscriptionEntity.getId_course_fk());
+                    insc.setId_user(inscriptionEntity.getId_user_fk());
+                    return insc;
+                })
+                .orElse(new InscriptionReadDto());
     }
-
- */
 }

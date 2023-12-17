@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class UserReadDto {
     private Integer id;
     private String username;
-    private String password;
     private String lastName;
     private String firstName;
     private String phone;

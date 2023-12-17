@@ -1,8 +1,11 @@
 package com.example.JAM23.demo.controllers;
 
 import com.example.JAM23.demo.auth.User.User;
+import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
+import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionAddDto;
 import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionReadDto;
+import com.example.JAM23.demo.model.dtos.users.UserReadDto;
 import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.CourseRepository;
@@ -22,17 +25,17 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class InscriptionController {
     private final InscriptionService inscriptionService;
-    private final InscriptionRepository inscriptionRepository;
 
+    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
+    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
+    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
+    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
 
-    // TODO get all students by id course
-    // TODO get all students by id course
-    // TODO get all students by id course
-    // TODO get all students by id course
-    // TODO get all students by id course
-    // TODO get all students by id course
-
-
+    @PutMapping("/{idInscription}")
+    public ResponseEntity<InscriptionReadDto> editInscriptionById(@PathVariable Integer idInscription,
+                                                                  @RequestBody InscriptionAddDto inscriptionAddDto){
+        return new ResponseEntity<>(inscriptionService.editInscriptionById(idInscription , inscriptionAddDto), HttpStatus.ACCEPTED);
+    }
 
     @GetMapping
     public ResponseEntity<List<InscriptionReadDto>> findAllInscription() {
@@ -49,5 +52,17 @@ public class InscriptionController {
     public ResponseEntity<List<CourseReadDto>> findAllInscriptions(@PathVariable String username) {
         List<CourseReadDto> coursesInscripted = inscriptionService.findAllCoursesInscriptedByUsername(username);
         return new ResponseEntity<>(coursesInscripted, HttpStatus.OK);
+    }
+
+    @GetMapping("/course/{idCourse}")
+    public ResponseEntity<List<UserReadDto>> findAllInscriptedUsersByIdCourse(@PathVariable Integer idCourse) {
+        List<UserReadDto> inscriptedUsers = inscriptionService.findAllInscriptedUsersByIdCourse(idCourse);
+        return new ResponseEntity<>(inscriptedUsers, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{idInscription}")
+    public ResponseEntity<String> deleteInscriptionById(@PathVariable Integer idInscription) {
+        inscriptionService.deleteInscriptionById(idInscription);
+        return new ResponseEntity<>("Inscripcion eliminada!", HttpStatus.ACCEPTED);
     }
 }
