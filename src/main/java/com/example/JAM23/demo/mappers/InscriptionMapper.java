@@ -14,8 +14,8 @@ public class InscriptionMapper {
                 .ofNullable(inscriptionEntity)
                 .map(entity -> {
                     InscriptionReadDto insc = new InscriptionReadDto();
-                    insc.setId_course(inscriptionEntity.getId_course_fk());
-                    insc.setId_user(inscriptionEntity.getId_user_fk());
+                    insc.setId_course(inscriptionEntity.getCourse().getId()); //.getId_course_fk());
+                    insc.setId_user(inscriptionEntity.getUser().getId()); //.getId_user_fk());
                     return insc;
                 })
                 .orElse(new InscriptionReadDto());

@@ -23,11 +23,19 @@ public class AttendanceEntity {
     private Integer attendance_id;
 
 
-
     @ManyToOne(targetEntity = InscriptionEntity.class , fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ID_INSCRIPCION" , referencedColumnName = "id_insc", nullable = false)
     @JsonIgnore
     private InscriptionEntity inscription;
+
+    //private Integer id_insc;
+
+    /*
+    ALTER TABLE `jam2023-java`.`inscripciones`
+    DROP PRIMARY KEY,
+    ADD PRIMARY KEY (`id_insc`);
+     */
+
 
 
     @Column(name = "Fecha")

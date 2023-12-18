@@ -25,6 +25,11 @@ public class CourseEntity {
     private Integer duration;
     private String description;
 
+    /*
     @ManyToMany(mappedBy = "courses" , targetEntity = User.class)
     private Set<User> users = new HashSet<>();
+     */
+    @OneToMany(mappedBy = "course")
+    private Set<InscriptionEntity> inscription;
+
 }
