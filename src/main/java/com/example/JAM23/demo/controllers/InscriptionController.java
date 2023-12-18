@@ -1,16 +1,9 @@
 package com.example.JAM23.demo.controllers;
 
-import com.example.JAM23.demo.auth.User.User;
-import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionAddDto;
 import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionReadDto;
 import com.example.JAM23.demo.model.dtos.users.UserReadDto;
-import com.example.JAM23.demo.model.entities.CourseEntity;
-import com.example.JAM23.demo.model.entities.InscriptionEntity;
-import com.example.JAM23.demo.repositories.CourseRepository;
-import com.example.JAM23.demo.repositories.InscriptionRepository;
-import com.example.JAM23.demo.services.CourseService;
 import com.example.JAM23.demo.services.InscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

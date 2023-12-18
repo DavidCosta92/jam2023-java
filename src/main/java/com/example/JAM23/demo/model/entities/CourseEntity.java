@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name="cursos")
+@Entity(name="course")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class CourseEntity {
     @Id

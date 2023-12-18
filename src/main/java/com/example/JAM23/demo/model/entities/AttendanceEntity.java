@@ -15,33 +15,19 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "asistencia")
+@Entity(name = "attendance")
 public class AttendanceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer attendance_id;
-
+    private Integer id_att;
 
     @ManyToOne(targetEntity = InscriptionEntity.class , fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ID_INSCRIPCION" , referencedColumnName = "id_insc", nullable = false)
+    @JoinColumn(referencedColumnName = "id_insc", nullable = false)
     @JsonIgnore
     private InscriptionEntity inscription;
 
-    //private Integer id_insc;
-
-    /*
-    ALTER TABLE `jam2023-java`.`inscripciones`
-    DROP PRIMARY KEY,
-    ADD PRIMARY KEY (`id_insc`);
-     */
-
-
-
-    @Column(name = "Fecha")
     private LocalDate date;
-
-    @Column(name = "Asistencia")
     private boolean present;
 
 }
