@@ -5,7 +5,9 @@ import com.example.JAM23.demo.mappers.AttendanceMapper;
 import com.example.JAM23.demo.model.dtos.attendances.AttendanceDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.model.entities.AttendanceEntity;
+import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.AttendanceRepository;
+import com.example.JAM23.demo.repositories.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,8 @@ public class AttendanceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+    @Autowired
+    private InscriptionRepository inscriptionRepository;
 
 
     public AttendanceDto setAttendance (AttendanceDto attendanceDto){
@@ -47,14 +51,17 @@ public class AttendanceService {
         return attendanceMapper.attendanceEntityToAttendanceDto(attendance);
     }
     public List<AttendanceDto> getListAttendanceUserByIds (Integer idCourse, Integer idUser){
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        // TODO BUSCAR TODAS LAS ASITENCIAS DEL USUARIO A DETERMINADO CURSO
-        return new ArrayList<AttendanceDto>();
+        List<AttendanceDto> attendanceDtoList = new ArrayList<AttendanceDto>();
+        // obtener el id de iscripcion en base al id de ususario
+        Integer id_insc = inscriptionRepository.findByIdsCourseAndUser(idCourse , idUser).getId_insc();
+        if (id_insc > 0){
+            // si existe, obtener todos las asistencias basandas en el id de inscripcion
+            List<AttendanceEntity> attendanceEntitiesList = attendanceRepository.findAttendanceListByIdInsc(id_insc);
+            for (int i =0; i < attendanceEntitiesList.size() ; i++){
+                attendanceDtoList.add(attendanceMapper.attendanceEntityToAttendanceDto(attendanceEntitiesList.get(i)));
+            }
+        }
+        return attendanceDtoList;
     }
 
     // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO
