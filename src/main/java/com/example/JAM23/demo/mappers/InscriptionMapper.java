@@ -20,4 +20,5 @@ public class InscriptionMapper {
                 })
                 .orElse(new InscriptionReadDto());
     }
+
 }
