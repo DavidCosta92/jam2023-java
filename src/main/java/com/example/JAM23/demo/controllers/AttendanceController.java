@@ -15,11 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class AttendanceController {
-
     @Autowired
     private AttendanceService attendanceService;
 
-    // TODO VER ASISTENCIA A TAL CURSO, ID USER E ID CURSO
+    // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO?? => seria lo mismo que ponerla en false?
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
+    // TODO VER TODAS LAS ASISTENCIAS DE UN CURSO (osea mostrar el listado de todos los usuarios y sus asistencias a un curso)
 
     @GetMapping ("{idCourse}/{idUser}")
     public ResponseEntity<List<AttendanceDto>> getListAttendanceUserByIds(@PathVariable Integer idCourse, @PathVariable Integer idUser){
@@ -29,10 +30,4 @@ public class AttendanceController {
     public ResponseEntity<AttendanceDto> setAttendance (@RequestBody AttendanceDto attendanceDto){
         return new ResponseEntity<>(attendanceService.setAttendance(attendanceDto), HttpStatus.OK);
     }
-
-    // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO
-    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO
-
-    // TODO VER TODAS LAS ASISTENCIAS DE UN CURSO
-    // TODO VER TODAS LAS ASISTENCIAS DE UN USUARIO A DISTINTOS CURSOS?
 }

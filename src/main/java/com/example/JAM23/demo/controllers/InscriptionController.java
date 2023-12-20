@@ -32,8 +32,7 @@ public class InscriptionController {
 
     @GetMapping
     public ResponseEntity<List<InscriptionReadDto>> findAllInscription() {
-        List<InscriptionReadDto> allInscriptions= inscriptionService.findAll();
-        return new ResponseEntity<>(allInscriptions, HttpStatus.OK);
+        return new ResponseEntity<>(inscriptionService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{idInscription}")

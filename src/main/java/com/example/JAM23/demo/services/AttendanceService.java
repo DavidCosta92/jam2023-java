@@ -21,13 +21,15 @@ import java.util.Optional;
 public class AttendanceService {
     @Autowired
     private AttendanceMapper attendanceMapper;
-
     @Autowired
     private AttendanceRepository attendanceRepository;
     @Autowired
     private InscriptionRepository inscriptionRepository;
 
 
+    // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO?? => seria lo mismo que ponerla en false?
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
+    // TODO VER TODAS LAS ASISTENCIAS DE UN CURSO (osea mostrar el listado de todos los usuarios y sus asistencias a un curso)
     public AttendanceDto setAttendance (AttendanceDto attendanceDto){
         // si viene sin ID, asumimos que es un nuevo registro, se pone presente true
         if(attendanceDto.getId_att() == null){
@@ -63,10 +65,5 @@ public class AttendanceService {
         }
         return attendanceDtoList;
     }
-
-    // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO
-    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO
-    // TODO VER TODAS LAS ASISTENCIAS DE UN CURSO
-    // TODO VER TODAS LAS ASISTENCIAS DE UN USUARIO A DISTINTOS CURSOS?
 
 }

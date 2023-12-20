@@ -28,6 +28,9 @@ public class InscriptionService {
     // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
     // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
     // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
+
+    @Autowired
+    private CourseService courseService;
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -37,18 +40,22 @@ public class InscriptionService {
     private InscriptionRepository inscriptionRepository;
     @Autowired
     private InscriptionMapper inscriptionMapper;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CourseService courseService;
+
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserService userService;
 
     public List<InscriptionReadDto> findAll (){
-        return new ArrayList<>();//inscriptionRepository.findAll();
+        List<InscriptionReadDto> listDto = new ArrayList<>();
+        List<InscriptionEntity> listEntity =  inscriptionRepository.findAll();
+
+        for (int i = 0; i < listEntity.size(); i++){
+            listDto.add(inscriptionMapper.inscriptionEntityTOInscriptionReadDto(listEntity.get(i)));
+        }
+        return listDto;
     }
 
     public List<UserReadDto> findAllInscriptedUsersByIdCourse(Integer idCourse){
