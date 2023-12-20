@@ -1,9 +1,11 @@
 package com.example.JAM23.demo.model.dtos.inscriptions;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

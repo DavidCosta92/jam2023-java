@@ -24,20 +24,30 @@ public class InscriptionController {
     // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
     // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
 
-    @PutMapping("/{idInscription}")
-    public ResponseEntity<InscriptionReadDto> editInscriptionById(@PathVariable Integer idInscription,
-                                                                  @RequestBody InscriptionAddDto inscriptionAddDto){
-        return new ResponseEntity<>(inscriptionService.editInscriptionById(idInscription , inscriptionAddDto), HttpStatus.ACCEPTED);
-    }
+
 
     @GetMapping
     public ResponseEntity<List<InscriptionReadDto>> findAllInscription() {
         return new ResponseEntity<>(inscriptionService.findAll(), HttpStatus.OK);
     }
+    @PostMapping()
+    public ResponseEntity<InscriptionReadDto> createInscription (@RequestBody InscriptionAddDto inscriptionAddDto){
+        return new ResponseEntity<>(inscriptionService.createInscription(inscriptionAddDto) , HttpStatus.OK);
+    }
 
     @GetMapping("/{idInscription}")
     public ResponseEntity<InscriptionReadDto> findInscriptionById(@PathVariable Integer idInscription) {        ;
         return new ResponseEntity<>(inscriptionService.findInscriptionById(idInscription), HttpStatus.OK);
+    }
+    @PutMapping("/{idInscription}")
+    public ResponseEntity<InscriptionReadDto> editInscriptionById(@PathVariable Integer idInscription,
+                                                                  @RequestBody InscriptionAddDto inscriptionAddDto){
+        return new ResponseEntity<>(inscriptionService.editInscriptionById(idInscription , inscriptionAddDto), HttpStatus.ACCEPTED);
+    }
+    @DeleteMapping("/{idInscription}")
+    public ResponseEntity<String> deleteInscriptionById(@PathVariable Integer idInscription) {
+        inscriptionService.deleteInscriptionById(idInscription);
+        return new ResponseEntity<>("Inscripcion eliminada!", HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/user/{username}")
@@ -52,9 +62,5 @@ public class InscriptionController {
         return new ResponseEntity<>(inscriptedUsers, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idInscription}")
-    public ResponseEntity<String> deleteInscriptionById(@PathVariable Integer idInscription) {
-        inscriptionService.deleteInscriptionById(idInscription);
-        return new ResponseEntity<>("Inscripcion eliminada!", HttpStatus.ACCEPTED);
-    }
+
 }

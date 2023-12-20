@@ -58,6 +58,15 @@ public class InscriptionService {
         return listDto;
     }
 
+    public InscriptionReadDto createInscription(InscriptionAddDto addDto){
+        return Optional
+                .ofNullable(addDto)
+                .map(add -> inscriptionMapper.inscriptionAddDtoToEntity(addDto))
+                .map(entity ->inscriptionRepository.save(entity))
+                .map(entity -> inscriptionMapper.inscriptionEntityTOInscriptionReadDto(entity))
+                .orElse(new InscriptionReadDto());
+    }
+
     public List<UserReadDto> findAllInscriptedUsersByIdCourse(Integer idCourse){
         List<User> inscriptedUsers = userRepository.findAllInscriptedUsersIdByIdCourse(idCourse);
         List<UserReadDto> inscriptedUsersDtos = new ArrayList<>();
@@ -105,28 +114,17 @@ public class InscriptionService {
         Optional<InscriptionEntity> inscriptionEntity = inscriptionRepository.findById(idInscription);
 
         if(inscriptionEntity.isPresent()){
-            /*
-            Integer id_user_fk = inscriptionEntity.get().getId_user_fk();
-            Integer id_course_fk = inscriptionEntity.get().getId_course_fk();
-
-
-            if(id_user !=null && id_course !=null){
-                inscriptionEntity.get().setId(new InscriptionKey( id_user_fk , id_course_fk));
-            } else {
-                if(id_user !=null) inscriptionEntity.get().setId(new InscriptionKey( id_user , id_course_fk)); ; // .setId_user_fk(id_user);
-                if(id_course !=null) inscriptionEntity.get().setId(new InscriptionKey( id_user_fk, id_course)); ; // .setId_course_fk(id_course);
+            if(id_user !=null) {
+                User user = userRepository.findById(id_user).get();
+                inscriptionEntity.get().setUser(user);
             }
-             */
-/*
 
-ESTO ESTA COMENTADO PORQUE NO PUEDO MODIFICAR LOS ID SI TENGO UNA ENTIDAD USUARIO, DEBERIA CAMBIAR EL USUARIO COMO ENTIDAD Y NO COMO UN NUMERO DE USUER
-
-
-            if(id_user !=null) inscriptionEntity.get().setId_user_fk(id_user); //.setId_user_fk(id_user);
-            if(id_course !=null) inscriptionEntity.get().setId_course_fk(id_course); //.setId_course_fk(id_course);
+            if(id_course !=null) {
+                CourseEntity course = courseRepository.findById(id_course).get();
+                inscriptionEntity.get().setCourse(course);
+            }
             inscriptionRepository.save(inscriptionEntity.get());
 
- */
         }
         return inscriptionMapper.inscriptionEntityTOInscriptionReadDto(inscriptionEntity.get());
 
