@@ -50,6 +50,9 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        System.out.println("----------------------------------------------------------");
+        System.out.println(request);
+        System.out.println("----------------------------------------------------------");
         User user = new User().builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode( request.getPassword()))
@@ -57,7 +60,7 @@ public class AuthService {
                 .lastName(request.getLastName())
                 .phone(request.getPhone())
                 .dni(request.getDni())
-                .email((request.getEmail()))
+                .email(request.getEmail())
                 .gender(request.getGender())
                 .role(Role.USER)
                 .build();
