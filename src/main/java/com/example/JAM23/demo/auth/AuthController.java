@@ -22,6 +22,12 @@ import java.util.List;
 public class AuthController {
     private final AuthService authService;
 
+// TODO => AGREGAR ENDPOINT Y LOGICA PARA BLOQUEAR USUARIOS... BUSCAR METODO isAccountNonLocked(), AGREGAR ENDPOINT Y LOGICA PARA
+//  MANEJAR USUARIOS BLOQUEADOS, Deberiamos ver que es mejor, tal vez, la forma mas eficiente,
+//  es por roles? tipo rol BLOQUED_USER?
+
+
+
     @PostMapping ("login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.login(request));

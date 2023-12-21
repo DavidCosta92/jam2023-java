@@ -1,16 +1,21 @@
 package com.example.JAM23.demo.services;
 
+import com.example.JAM23.demo.auth.User.User;
+import com.example.JAM23.demo.auth.UserRepository;
 import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import com.example.JAM23.demo.mappers.AttendanceMapper;
+import com.example.JAM23.demo.mappers.InscriptionMapper;
+import com.example.JAM23.demo.mappers.UserMapper;
 import com.example.JAM23.demo.model.dtos.attendances.AttendanceDto;
-import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
+import com.example.JAM23.demo.model.dtos.attendances.UserAttendanceListDto;
+import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionReadDto;
+import com.example.JAM23.demo.model.dtos.users.UserReadDto;
 import com.example.JAM23.demo.model.entities.AttendanceEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.AttendanceRepository;
 import com.example.JAM23.demo.repositories.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,13 +28,39 @@ public class AttendanceService {
     private AttendanceMapper attendanceMapper;
     @Autowired
     private AttendanceRepository attendanceRepository;
+
     @Autowired
     private InscriptionRepository inscriptionRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private  InscriptionMapper inscriptionMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO?? => seria lo mismo que ponerla en false?
     // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
-    // TODO VER TODAS LAS ASISTENCIAS DE UN CURSO (osea mostrar el listado de todos los usuarios y sus asistencias a un curso)
+
+
+
+    public List<UserAttendanceListDto> getUserAttendanceListByIdCourse (Integer idCourse){
+        List <UserAttendanceListDto> usersAttendanceList = new ArrayList<>();
+        List <User> usersInscripted = userRepository.findAllInscriptedUsersIdByIdCourse(idCourse);
+
+        if(usersInscripted.size() > 0){
+            for (int i = 0; i< usersInscripted.size(); i++){
+                // todo LISTA DE attendance del usuario a un curso
+                List<AttendanceDto> attendanceList = getListAttendanceUserByIds(idCourse , usersInscripted.get(i).getId());
+                UserAttendanceListDto userAttendanceListDto = new UserAttendanceListDto( userMapper.userEntityTOUserReadDto(usersInscripted.get(i)) , attendanceList);
+                usersAttendanceList.add(userAttendanceListDto);
+            }
+        }
+        return usersAttendanceList;
+    }
+
+
     public AttendanceDto setAttendance (AttendanceDto attendanceDto){
         // si viene sin ID, asumimos que es un nuevo registro, se pone presente true
         if(attendanceDto.getId_att() == null){

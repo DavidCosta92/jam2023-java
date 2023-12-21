@@ -55,7 +55,7 @@ public class User implements UserDetails {
     private Set<CourseEntity> courses = new HashSet<>();
     */
     @OneToMany(mappedBy = "user")
-    private Set<InscriptionEntity> inscription;
+    private List<InscriptionEntity> inscription;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

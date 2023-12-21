@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class AttendanceDto {
     private Integer id_att;
     private Integer id_inscription;

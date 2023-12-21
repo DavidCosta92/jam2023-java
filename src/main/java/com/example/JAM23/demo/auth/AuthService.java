@@ -22,19 +22,21 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     AuthenticationManager authenticationManager;
 
-    /*
-    @Autowired
-    JwtService jwtService;
-    @Autowired
-    UserRepository userRepository;
-     */
+// TODO => AGREGAR ENDPOINT Y LOGICA PARA BLOQUEAR USUARIOS... BUSCAR METODO isAccountNonLocked(), AGREGAR ENDPOINT Y LOGICA PARA
+//  MANEJAR USUARIOS BLOQUEADOS, Deberiamos ver que es mejor, tal vez, la forma mas eficiente,
+//  es por roles? tipo rol BLOQUED_USER?
+
+// TODO =>
+
     public AuthResponse login(LoginRequest request) {
         //Authentica al usuario, osea lo guarda el contex security holder, dentro de un obj que representa el usuario logueado
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername() , request.getPassword()));

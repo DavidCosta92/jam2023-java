@@ -1,5 +1,6 @@
 package com.example.JAM23.demo.repositories;
 
+import com.example.JAM23.demo.model.dtos.attendances.AttendanceDto;
 import com.example.JAM23.demo.model.entities.CourseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,10 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Integer> {
             "    JOIN course ON course.id = inscription.id_course_fk\n" +
             "    WHERE user.username = ?;", nativeQuery = true)
     List<CourseEntity> findAllCoursesInscripted(String username);
+
+/*
+    @Query(value = "SELECT course.id_user_fk WHERE course.id_course_fK = ?", nativeQuery = true)
+    List<> getAttendanceListByIdCourse (Integer idCourse);
+
+ */
 }
