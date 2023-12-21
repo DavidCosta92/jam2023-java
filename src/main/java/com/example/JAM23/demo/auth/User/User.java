@@ -1,6 +1,7 @@
 package com.example.JAM23.demo.auth.User;
 
 import com.example.JAM23.demo.model.entities.CourseEntity;
+import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,17 +46,17 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING) // para obtener el nombre del rol y no el numero de rol
     Role role;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "inscripciones",
-            joinColumns = @JoinColumn(name = "id_user_fk", nullable = false), // jpa crea estos atributos automaticamente en las entidades???
-            inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = false)) // jpa crea estos atributos automaticamente en las entidades???
-    private Set<CourseEntity> courses = new HashSet<>();
-
 
     /*
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = CascadeType.ALL, targetEntity = CourseEntity.class)
+    @JoinTable(name = "inscripciones",
+            joinColumns = @JoinColumn(name = "id_user_fk", nullable = true), // jpa crea estos atributos automaticamente en las entidades
+            inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = true)) // jpa crea estos atributos automaticamente en las entidades
     private Set<CourseEntity> courses = new HashSet<>();
-*/
+    */
+    @OneToMany(mappedBy = "user")
+    private Set<InscriptionEntity> inscription;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // En este ejemplo, solo retorna el rol de usuario como si fuera un permiso,

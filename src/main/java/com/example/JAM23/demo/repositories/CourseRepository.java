@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends JpaRepository<CourseEntity, Integer> {
 
-    @Query(value = "    SELECT cursos.id , cursos.description ,cursos.duration, cursos.id_teacher , cursos.name FROM user\n" +
-            "    JOIN inscripciones ON user.id = inscripciones.id_user_fk\n" +
-            "    JOIN cursos ON cursos.id = inscripciones.id_course_fk\n" +
+    @Query(value = "    SELECT course.id , course.description ,course.duration, course.id_teacher , course.name FROM user\n" +
+            "    JOIN inscription ON user.id = inscription.id_user_fk\n" +
+            "    JOIN course ON course.id = inscription.id_course_fk\n" +
             "    WHERE user.username = ?;", nativeQuery = true)
     List<CourseEntity> findAllCoursesInscripted(String username);
 }

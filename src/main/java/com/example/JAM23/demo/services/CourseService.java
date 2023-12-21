@@ -63,8 +63,8 @@ public class CourseService {
             if (name != null) bdEntity.get().setName(name);
             if (duration != null) bdEntity.get().setDuration(duration);
             if (description != null) bdEntity.get().setDescription(description);
+            courseRepository.save(bdEntity.get());
         }
-        courseRepository.save(bdEntity.get());
         return courseMapper.courseEntityTOCourseReadDto(bdEntity.get());
     }
 

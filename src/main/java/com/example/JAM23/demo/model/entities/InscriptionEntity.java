@@ -1,23 +1,26 @@
 package com.example.JAM23.demo.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.JAM23.demo.auth.User.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@Entity(name="inscripciones")
+@Builder
+@Entity(name="inscription")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class InscriptionEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer id_user_fk; // No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
-    private Integer id_course_fk; // No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
-   //  private String role; esto lo saque porque me parece redundante, ya que todos los inscriptos seran si o si estudiantes
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id_insc;
+    @ManyToOne()
+    @JoinColumn(name = "id_user_fk" , nullable = false)
+    private User user; // No hacen falta agregarlos aca, porque jpa lo agrega en al relacion entre curso y usuario
+
+    @ManyToOne()
+    @JoinColumn(name = "id_course_fk" , nullable = false)
+    private CourseEntity course;
 }
