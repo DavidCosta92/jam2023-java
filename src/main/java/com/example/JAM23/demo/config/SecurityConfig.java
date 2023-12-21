@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf-> csrf.disable())
+                .csrf(csrf-> csrf.disable()).headers().disable()
                 //.headers().httpStrictTransportSecurity().maxAgeInSeconds(0).includeSubDomains(true)
                 //.headers().httpStrictTransportSecurity().disable()
                 .authorizeHttpRequests(auth -> auth
