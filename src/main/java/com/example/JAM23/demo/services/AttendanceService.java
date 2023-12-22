@@ -51,7 +51,6 @@ public class AttendanceService {
 
         if(usersInscripted.size() > 0){
             for (int i = 0; i< usersInscripted.size(); i++){
-                // todo LISTA DE attendance del usuario a un curso
                 List<AttendanceDto> attendanceList = getListAttendanceUserByIds(idCourse , usersInscripted.get(i).getId());
                 UserAttendanceListDto userAttendanceListDto = new UserAttendanceListDto( userMapper.userEntityTOUserReadDto(usersInscripted.get(i)) , attendanceList);
                 usersAttendanceList.add(userAttendanceListDto);
