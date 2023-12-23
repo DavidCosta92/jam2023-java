@@ -54,7 +54,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "id_course_fk", nullable = true)) // jpa crea estos atributos automaticamente en las entidades
     private Set<CourseEntity> courses = new HashSet<>();
     */
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<InscriptionEntity> inscription;
 
     @Override

@@ -29,9 +29,9 @@ public class SecurityConfig {
                 //.headers().httpStrictTransportSecurity().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/course/**").permitAll()
-                        .requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().permitAll()
+                        //.requestMatchers("/course/**").permitAll()
+                        //.requestMatchers("/inscription/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

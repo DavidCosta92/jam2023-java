@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User , Integer> {
             "JOIN inscription ON user.id = inscription.id_user_fk\n" +
             "WHERE inscription.id_course_fk =  ?;", nativeQuery = true)
     List<User> findAllInscriptedUsersIdByIdCourse(Integer idCourse);
+
+    boolean existsByUsername(String username);
 }
