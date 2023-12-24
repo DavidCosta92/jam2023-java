@@ -14,8 +14,9 @@ public class GlobalExceptionHandler {
     // excepts personalizadas
     // excepts personalizadas
     @ExceptionHandler(AlreadyExistException.class)
+    @ResponseBody
     public ResponseEntity<ExceptionMessages> alreadyExistException (RuntimeException ex){
-        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.DUPLICATE_VALUES.ordinal()) , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.DUPLICATE_VALUES.ordinal()) , HttpStatus.I_AM_A_TEAPOT);
     }
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionMessages> notFoundException (RuntimeException ex){

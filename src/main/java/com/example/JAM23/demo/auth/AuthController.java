@@ -9,6 +9,7 @@ import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.repositories.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +33,12 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.login(request));
     }
+
     @PostMapping ("register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
+
     @GetMapping ("user")
     public ResponseEntity<LoguedUserDetails> getLoguedUserDetails(@RequestHeader HttpHeaders headers){
         return ResponseEntity.ok(authService.getLoguedUserDetails(headers));

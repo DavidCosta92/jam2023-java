@@ -36,9 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
             filterChain.doFilter(request, response);
             return;
         }
-
         username = jwtService.getUsernameFromToken(token);
-
         // si es valido el token, obtengo el username y chequeo si esta authenticado en el security context
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);

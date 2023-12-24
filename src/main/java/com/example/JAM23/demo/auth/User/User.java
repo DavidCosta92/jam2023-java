@@ -36,10 +36,10 @@ public class User implements UserDetails {
     String password;
     String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false , unique = true)
     String dni;
 
-    @Column(nullable = false)
+    @Column(nullable = false , unique = true)
     String email;
 
     String gender;

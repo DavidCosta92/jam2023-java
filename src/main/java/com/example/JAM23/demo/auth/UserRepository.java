@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User , Integer> {
     Optional<User> findByUsername (String username);
+    Optional<User> findByDni (String dni);
+    Optional<User> findByEmail (String email);
 
     @Query(value = "SELECT user.id, user.dni, user.email, user.first_name,user.password, user.last_name, user.gender, user.phone, user.role, user.username FROM user\n" +
             "JOIN inscription ON user.id = inscription.id_user_fk\n" +

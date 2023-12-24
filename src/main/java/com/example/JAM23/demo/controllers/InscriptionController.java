@@ -52,14 +52,12 @@ public class InscriptionController {
 
     @GetMapping("/user/{username}")
     public ResponseEntity<List<CourseReadDto>> findAllInscriptions(@PathVariable String username) {
-        List<CourseReadDto> coursesInscripted = inscriptionService.findAllCoursesInscriptedByUsername(username);
-        return new ResponseEntity<>(coursesInscripted, HttpStatus.OK);
+        return new ResponseEntity<>(inscriptionService.findAllCoursesInscriptedByUsername(username), HttpStatus.OK);
     }
 
     @GetMapping("/course/{idCourse}")
     public ResponseEntity<List<UserReadDto>> findAllInscriptedUsersByIdCourse(@PathVariable Integer idCourse) {
-        List<UserReadDto> inscriptedUsers = inscriptionService.findAllInscriptedUsersByIdCourse(idCourse);
-        return new ResponseEntity<>(inscriptedUsers, HttpStatus.OK);
+        return new ResponseEntity<>(inscriptionService.findAllInscriptedUsersByIdCourse(idCourse), HttpStatus.OK);
     }
 
 
