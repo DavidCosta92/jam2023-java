@@ -59,14 +59,20 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        String req_username = request.getUsername();
-        String req_password = request.getUsername();
-        String req_firstName = request.getFirstName();
-        String req_lastName = request.getLastName();
-        String req_phone = request.getPhone();
-        String req_dni = request.getDni();
-        String req_email = request.getEmail();
+        // validations, return value or trows exceptions
+        String req_username = validator.validateUsername(request.getUsername());
+        String req_password = validator.validatePassword(request.getPassword());
+        String req_firstName = validator.validateFirstName(request.getFirstName());
+        String req_lastName = validator.validateLastName(request.getLastName());
+        String req_phone = validator.validatePhone(request.getPhone());
+        String req_dni = validator.validateDni(request.getDni());
+        String req_email = validator.validateEmail(request.getEmail());
+
+        // TODO GENDER DEBERIA SER UN ENUM ??
         String req_gender = request.getGender();
+
+
+
 
 
         validator.alreadyExistUser(req_username, req_dni , req_email); // TROWS EXCEPTS

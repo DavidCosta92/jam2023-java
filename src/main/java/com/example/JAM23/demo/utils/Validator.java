@@ -16,43 +16,72 @@ public class Validator {
     @Autowired
     UserRepository userRepository;
 
-
-    // VALIDACION DATOS
+    // VALIDACION DATOS PUROS
     // TODO STRING NO VACIOS
-    public void emptyString(String field, String value){
+    public String emptyString(String field, String value){
         if(value.isEmpty()) throw new InvalidValueException(field + " no puede estar vacio!");
+        return value;
     }
     // TODO string largo
-    public void stringMinSize(String field, Integer minSize, String value){
+    public String stringMinSize(String field, Integer minSize, String value){
         if(value.length() < minSize) throw new InvalidValueException(field + " debe tener al menos "+minSize+" caracteres!");
+        return value;
     }
 
     // TODO NO SIMBOLOS Y NO NUMEROS
-    public void stringOnlyLettersAndNumbers (String field, String value){
-        Pattern pattern = Pattern.compile("[^a-zA-Z0-9 ]");
-        if(!pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros y letras!");
+    public String stringOnlyLettersAndNumbers (String field, String value){
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+        // "[^a-zA-Z0-9]" => CUALQUIER CARACTER MENOS LOS ENUMERADOS, osea si encuentra un caracter distinto, lanza excepcion
+        if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros y letras!");
+        return value;
     }
-    public void stringOnlyLetters (String field, String value){
-        Pattern pattern = Pattern.compile("[a-zA-Z]+"); // ("[^a-zA-Z]");
-        if(!pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener letras!");
+    public String stringOnlyLetters (String field, String value){
+        Pattern pattern = Pattern.compile("[^a-zA-Z]");
+        // "[^a-zA-Z]" => CUALQUIER CARACTER MENOS LOS ENUMERADOS, osea si encuentra un caracter distinto, lanza excepcion
+        if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener letras!");
+        return value;
     }
-    public void stringOnlyNumbers (String field, String value){
-        Pattern pattern = Pattern.compile("[0-9]+"); //("[^0-9]");
-        if(!pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros!");
+    public String stringOnlyNumbers (String field, String value){
+        Pattern pattern = Pattern.compile("[^0-9]");
+        if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros!");
+        return value;
     }
 
+    // VALIDACION DATOS SEGUN NEGOCIO
 
-
-    // TODO validar email QUE CONTENGA @
-
-    // TODO USERNAME NO PUEDE CONTENER SIMBOLOS? SOLO NUMEROS Y LETRAS?
-
-    // TODO PHONE QUE TENGA UN VALOR NUMERICO, Y QUE TENGA TAL CANTIDAD DE CARACTERES?
-    // TODO DNI QUE TENGA UN VALOR NUMERICO, Y QUE TENGA TAL CANTIDAD DE CARACTERES?
     // TODO GENDER DEBERIA SER UN ENUM ??
 
+    public String validateUsername(String username){
+        stringMinSize("Username", 3 , username);
+        return stringOnlyLettersAndNumbers("Username" , username);
+    }
+    public String validatePassword(String password){
+        return stringMinSize("Password", 8 , password);
+    }
+    public String validateFirstName(String firstName){
+        return stringOnlyLetters("FirstName" , firstName);
+    }
+    public String validateLastName(String lastName){
+        return stringOnlyLetters("LastName" , lastName);
+    }
+    public String validatePhone(String phone){
+        return stringOnlyNumbers("Phone" , phone);
+    }
+    public String validateDni(String dni){
+        stringMinSize("Dni",7 , dni);
+        return stringOnlyNumbers("Dni" , dni);
+    }
+    public String validateEmail(String email){
+        String regex = "^[a-zA-Z0-9._]+@[a-zA-Z0-9._]+\\.[a-zA-Z]{2,6}$";
+        //  antes del "@" => puede tener números, letras, puntos, y guion bajo.
+        //  tiene que tener un "@"
+        //  Después del "@" puede tener números, letras, puntos y guion bajo.
+        //  Finalmente, el dominio debe terminar con un punto seguido de dos a seis letras.
+        if(! Pattern.compile(regex).matcher(email).matches() ) throw new InvalidValueException("Email con estructura incorrecta!");
+        return email;
+    }
 
-    // VALIDACION OBJETOS
+    // VALIDACION OBJETOS NEGOCIO
 
     public boolean existUserByUsername( String username){
         Optional<User> byUsername = userRepository.findByUsername(username);
