@@ -14,6 +14,7 @@ import com.example.JAM23.demo.model.entities.AttendanceEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.AttendanceRepository;
 import com.example.JAM23.demo.repositories.InscriptionRepository;
+import com.example.JAM23.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +39,14 @@ public class AttendanceService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private Validator validator;
 
-
-    // TODO ELIMINAR ASISTENCIA DE TAL USER A TAL CURSO?? => seria lo mismo que ponerla en false?
     // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
-
-
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
+    // TODO MODIFICAR ASISTENCIA DE TAL USER A TAL CURSO => Cual seria el caso practico? equivocarnos de user o de curso?
 
     public List<UserAttendanceListDto> getUserAttendanceListByIdCourse (Integer idCourse){
         List <UserAttendanceListDto> usersAttendanceList = new ArrayList<>();
@@ -58,9 +61,10 @@ public class AttendanceService {
         }
         return usersAttendanceList;
     }
-
-
     public AttendanceDto setAttendance (AttendanceDto attendanceDto){
+        validator.existInscriptionById(attendanceDto.getId_inscription());
+        validator.validateAttendanceDate(attendanceDto.getDate());
+
         // si viene sin ID, asumimos que es un nuevo registro, se pone presente true
         if(attendanceDto.getId_att() == null){
             attendanceDto.setPresent(true);

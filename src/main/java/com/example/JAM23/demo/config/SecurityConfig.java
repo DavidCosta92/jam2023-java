@@ -29,9 +29,10 @@ public class SecurityConfig {
                 //.headers().httpStrictTransportSecurity().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/docs/swagger-ui/**").permitAll()
                         //.requestMatchers("/course/**").permitAll()
                         //.requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

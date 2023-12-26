@@ -43,7 +43,6 @@ public class AuthService {
 //  MANEJAR USUARIOS BLOQUEADOS, Deberiamos ver que es mejor, tal vez, la forma mas eficiente,
 //  es por roles? tipo rol BLOQUED_USER?
 
-// TODO =>
 
     public AuthResponse login(LoginRequest request) {
         //Authentica al usuario, osea lo guarda el contex security holder, dentro de un obj que representa el usuario logueado
@@ -57,7 +56,6 @@ public class AuthService {
                 .token(token)
                 .build();
     }
-
     public AuthResponse register(RegisterRequest request) {
         // validations, return value or trows exceptions
         String req_username = validator.validateUsername(request.getUsername());
@@ -68,14 +66,10 @@ public class AuthService {
         String req_dni = validator.validateDni(request.getDni());
         String req_email = validator.validateEmail(request.getEmail());
 
+        validator.alreadyExistUser(req_username, req_dni , req_email); // TROWS EXCEPTS
+
         // TODO GENDER DEBERIA SER UN ENUM ??
         String req_gender = request.getGender();
-
-
-
-
-
-        validator.alreadyExistUser(req_username, req_dni , req_email); // TROWS EXCEPTS
 
         User user = new User().builder()
                         .username(req_username)
@@ -96,8 +90,21 @@ public class AuthService {
                         .token(jwtService.getToken(user))
                         .build();
     }
-
     public LoguedUserDetails getLoguedUserDetails (HttpHeaders headers){
+
+
+        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
+        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
+
+
+
+        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
+        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
+
+
+        //        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
+        //        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
+
         String token = jwtService.getTokenFromHeader(headers);
         String username = jwtService.getUsernameFromToken(token);
         User loguedUser = userRepository.findByUsername(username).get();

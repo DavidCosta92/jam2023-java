@@ -14,6 +14,7 @@ import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.CourseRepository;
 import com.example.JAM23.demo.repositories.InscriptionRepository;
+import com.example.JAM23.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,6 @@ import java.util.Optional;
 
 @Service
 public class InscriptionService {
-
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
 
     @Autowired
     private CourseService courseService;
@@ -48,17 +44,20 @@ public class InscriptionService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private Validator validator;
+
     public List<InscriptionReadDto> findAll (){
         List<InscriptionReadDto> listDto = new ArrayList<>();
         List<InscriptionEntity> listEntity =  inscriptionRepository.findAll();
-
         for (int i = 0; i < listEntity.size(); i++){
             listDto.add(inscriptionMapper.inscriptionEntityTOInscriptionReadDto(listEntity.get(i)));
         }
         return listDto;
     }
-
     public InscriptionReadDto createInscription(InscriptionAddDto addDto){
+        validator.existUserById(addDto.getId_user());
+        validator.existCourseById(addDto.getId_course());
         return Optional
                 .ofNullable(addDto)
                 .map(add -> inscriptionMapper.inscriptionAddDtoToEntity(addDto))
@@ -66,7 +65,6 @@ public class InscriptionService {
                 .map(entity -> inscriptionMapper.inscriptionEntityTOInscriptionReadDto(entity))
                 .orElse(new InscriptionReadDto());
     }
-
     public List<UserReadDto> findAllInscriptedUsersByIdCourse(Integer idCourse){
         List<User> inscriptedUsers = userRepository.findAllInscriptedUsersIdByIdCourse(idCourse);
         List<UserReadDto> inscriptedUsersDtos = new ArrayList<>();
@@ -96,7 +94,6 @@ public class InscriptionService {
 
         return  inscription;
     }
-
     public List<CourseReadDto> findAllCoursesInscriptedByUsername(String username){
         List<CourseEntity> coursesEntities = courseRepository.findAllCoursesInscripted(username);
         List<CourseReadDto> courseReadDtos = new ArrayList<>();
@@ -106,28 +103,25 @@ public class InscriptionService {
         }
         return courseReadDtos;
     }
-
     public InscriptionReadDto editInscriptionById(Integer idInscription , InscriptionAddDto inscriptionAddDto){
         Integer id_user = inscriptionAddDto.getId_user();
         Integer id_course = inscriptionAddDto.getId_course();
-
         Optional<InscriptionEntity> inscriptionEntity = inscriptionRepository.findById(idInscription);
 
         if(inscriptionEntity.isPresent()){
             if(id_user !=null) {
+                validator.existUserById(id_user);
                 User user = userRepository.findById(id_user).get();
                 inscriptionEntity.get().setUser(user);
             }
-
             if(id_course !=null) {
+                validator.existCourseById(id_course);
                 CourseEntity course = courseRepository.findById(id_course).get();
                 inscriptionEntity.get().setCourse(course);
             }
             inscriptionRepository.save(inscriptionEntity.get());
-
         }
         return inscriptionMapper.inscriptionEntityTOInscriptionReadDto(inscriptionEntity.get());
-
     }
     public void deleteInscriptionById(Integer idInscription){
         inscriptionRepository.deleteById(idInscription);
