@@ -61,7 +61,8 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // En este ejemplo, solo retorna el rol de usuario como si fuera un permiso,
         // en otros ejemplos, en vez de roles se pasan permisos especificos, ej: puede_guardar_productos
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        // return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities(); // ESTE METODO TIENE LA LOGICA PARA OBTENER EL ROL Y LOS PERMISOS ASOCIADOS
     }
 
     // TODOS ESTOS QUEDAN SETEADOS A TRUE, PORQUE SE VAN A VALIDAR EN EL JWT EN SI MISMO

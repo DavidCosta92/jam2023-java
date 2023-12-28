@@ -57,12 +57,12 @@ public class CourseService {
         return allCourses;
     }
     public CourseReadDto showCourseById (Integer idCourse){
-        return Optional
-                .ofNullable(idCourse)
-                .map(course -> courseRepository.findById(idCourse).get())
-                .map(courseEntity -> courseMapper.courseEntityTOCourseReadDto(courseEntity))
-                // .orElse(new CourseReadDto());
-                .orElseThrow(()->new NotFoundException("Curso no encontrado por ID: "+idCourse));
+        Optional<CourseEntity> course = courseRepository.findById(idCourse);
+        if(course.isPresent()){
+            return courseMapper.courseEntityTOCourseReadDto(course.get());
+        } else{
+            throw new NotFoundException("Curso no encontrado por ID: "+idCourse);
+        }
     }
     public CourseReadDto editCourseById(Integer idCourse, CourseAddDto course){
         Integer idTeacher = course.getIdTeacher();

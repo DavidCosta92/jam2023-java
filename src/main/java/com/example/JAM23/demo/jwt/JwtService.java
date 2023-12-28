@@ -1,5 +1,6 @@
 package com.example.JAM23.demo.jwt;
 
+import com.example.JAM23.demo.exception.customsExceptions.InvalidJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -46,18 +47,28 @@ public class JwtService {
     }
 
     public String getUsernameFromToken(String token) {
-        return getClaims(token , Claims :: getSubject);
-
+        try{
+            return getClaims(token , Claims :: getSubject);
+        }catch (Exception e){
+            throw new InvalidJwtException("Wrong JWT => "+e.getMessage());
+        }
     }
+
     public String getTokenFromRequest(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) return authHeader.substring(7);
-        return null;
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
+            return authHeader.substring(7);
+        }else{
+            throw new InvalidJwtException("JWT not found");
+        }
     }
     public String getTokenFromHeader(HttpHeaders headers) {
         final String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) return authHeader.substring(7);
-        return null;
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }else{
+            throw new InvalidJwtException("JWT not found");
+        }
     }
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);

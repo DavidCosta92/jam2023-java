@@ -1,12 +1,16 @@
 package com.example.JAM23.demo.config;
 
+import com.example.JAM23.demo.auth.User.Permission;
+import com.example.JAM23.demo.auth.User.Role;
 import com.example.JAM23.demo.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity (prePostEnabled = true, securedEnabled = true) // => PERMITITE =>  @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')") //@Secured({ "ADMIN", "TEACHER" })
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -30,9 +35,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/docs/swagger-ui/**").permitAll()
+                        //.requestMatchers("/course/**").hasAnyRole(Role.ADMIN.name() , Role.TEACHER.name())
+                        //.requestMatchers(HttpMethod.GET,"/course/**").hasAnyAuthority(Permission.READ_COURSES.name())
                         //.requestMatchers("/course/**").permitAll()
                         //.requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

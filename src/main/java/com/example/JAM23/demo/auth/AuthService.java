@@ -7,6 +7,7 @@ import com.example.JAM23.demo.auth.entities.LoginRequest;
 import com.example.JAM23.demo.auth.entities.LoguedUserDetails;
 import com.example.JAM23.demo.auth.entities.RegisterRequest;
 import com.example.JAM23.demo.exception.customsExceptions.AlreadyExistException;
+import com.example.JAM23.demo.exception.customsExceptions.InvalidJwtException;
 import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import com.example.JAM23.demo.jwt.JwtAuthenticationFilter;
 import com.example.JAM23.demo.jwt.JwtService;
@@ -17,11 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -91,35 +97,25 @@ public class AuthService {
                         .build();
     }
     public LoguedUserDetails getLoguedUserDetails (HttpHeaders headers){
-
-
-        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
-        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
-
-
-
-        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
-        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
-
-
-        //        // TODO ACA SI EL TOKEN ES ERRONEO, DEBO LANZAR UNA EXEPCION PERSONALIZADA Y MANEJARLA DE FORMA CORRECTA...
-        //        // TODO POR EL MOMENTO SOLO ENVIA UN ERROR 500 DICIENDO QUE EL JWT NO ES CORRECTO
-
+        SecurityContext securityContext = SecurityContextHolder.getContext();
         String token = jwtService.getTokenFromHeader(headers);
-        String username = jwtService.getUsernameFromToken(token);
-        User loguedUser = userRepository.findByUsername(username).get();
+        User loguedUser = (User) securityContext.getAuthentication().getPrincipal();
+
+        System.out.print("****** loguedUser From Context >>> "+loguedUser.getUsername()+" <<<");
 
         return new LoguedUserDetails()
                 .builder()
                 .token(token)
                 .id(loguedUser.getId())
-                .username(username)
+                .username(loguedUser.getUsername())
                 .firstName(loguedUser.getFirstName())
                 .lastName(loguedUser.getLastName())
                 .phone(loguedUser.getPhone())
                 .dni(loguedUser.getDni())
                 .email((loguedUser.getEmail()))
                 .gender(loguedUser.getGender())
+                .role(loguedUser.getRole())
+                .authorities(loguedUser.getAuthorities())
                 .build();
     }
 }

@@ -1,14 +1,10 @@
 package com.example.JAM23.demo.auth;
 
-import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.auth.entities.AuthResponse;
 import com.example.JAM23.demo.auth.entities.LoginRequest;
 import com.example.JAM23.demo.auth.entities.LoguedUserDetails;
 import com.example.JAM23.demo.auth.entities.RegisterRequest;
 import com.example.JAM23.demo.exception.ExceptionMessages;
-import com.example.JAM23.demo.model.entities.AttendanceEntity;
-import com.example.JAM23.demo.model.entities.CourseEntity;
-import com.example.JAM23.demo.repositories.CourseRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,9 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth/")
@@ -68,7 +61,10 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Returns an Object with User details",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = LoguedUserDetails.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "403", description = "JWT not found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
                     content = @Content) })
     @GetMapping ("user")
     public ResponseEntity<LoguedUserDetails> getLoguedUserDetails(@RequestHeader HttpHeaders headers){

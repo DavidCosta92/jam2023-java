@@ -1,6 +1,7 @@
 package com.example.JAM23.demo.exception;
 
 import com.example.JAM23.demo.exception.customsExceptions.AlreadyExistException;
+import com.example.JAM23.demo.exception.customsExceptions.InvalidJwtException;
 import com.example.JAM23.demo.exception.customsExceptions.InvalidValueException;
 import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionMessages> notFoundException (RuntimeException ex){
         return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.NOT_FOUND_BY_ID.ordinal()) , HttpStatus.NOT_FOUND);
     }
-
-
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<ExceptionMessages> invalidJwtException (InvalidJwtException ex){
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.WRONG_JWT.ordinal()) , HttpStatus.FORBIDDEN);
+    }
 
     // excepts defecto
     // excepts defecto

@@ -6,5 +6,6 @@ public enum InternalExceptionCodes {
     ILLEGAL_ARGS,
     DUPLICATE_VALUES,
     MISSING_VALUES,
-    NOT_FOUND_BY_ID
+    NOT_FOUND_BY_ID,
+    WRONG_JWT
 }

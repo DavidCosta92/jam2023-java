@@ -1,6 +1,7 @@
 package com.example.JAM23.demo.controllers;
 
 import com.example.JAM23.demo.auth.User.User;
+import com.example.JAM23.demo.exception.ExceptionMessages;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.model.entities.AttendanceEntity;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,33 +26,28 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class CourseController {
-
     @Autowired
     private CourseService courseService;
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Shows courses, requires a valid JWT")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "200", description = "List with all the courses",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = CourseReadDto.class)) }) })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')") //@Secured({ "ADMIN", "TEACHER" })
     public ResponseEntity<List<CourseReadDto>> showAllCourses() {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Shows course by ID, requires a valid JWT")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "200", description = "Course by ID",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = CourseReadDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Curso no encontrado por ID: id",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @GetMapping("{id}")
     public ResponseEntity<CourseReadDto> showCourseById(@PathVariable Integer id) {
         return new ResponseEntity<>(courseService.showCourseById(id), HttpStatus.OK);
@@ -79,6 +77,7 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
                     content = @Content) })
     @PutMapping("{id}")
+    // @PreAuthorize(hasRole("admin") orhasPrivil("read"))
     public ResponseEntity<CourseReadDto> editCourseById(@PathVariable Integer id, @RequestBody CourseAddDto courseAddDto ) {
         return new ResponseEntity<>(courseService.editCourseById(id,courseAddDto), HttpStatus.ACCEPTED);
     }
