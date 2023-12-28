@@ -25,6 +25,7 @@ import java.util.List;
 @RequestMapping("/course/")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000"})
+// @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')") //@Secured({ "ADMIN", "TEACHER" })
 public class CourseController {
     @Autowired
     private CourseService courseService;
@@ -35,7 +36,7 @@ public class CourseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CourseReadDto.class)) }) })
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')") //@Secured({ "ADMIN", "TEACHER" })
+    @PreAuthorize("hasAuthority('READ_COURSES')") //@Secured({ "ADMIN", "TEACHER" })
     public ResponseEntity<List<CourseReadDto>> showAllCourses() {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }
