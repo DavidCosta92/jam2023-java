@@ -46,6 +46,8 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Course by ID",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CourseReadDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request, Error as result of sending invalid ID",
+                    content = @Content),
             @ApiResponse(responseCode = "404", description = "Curso no encontrado por ID: id",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
@@ -70,34 +72,34 @@ public class CourseController {
         return new ResponseEntity<>(courseService.createCourse(courseAddDto), HttpStatus.CREATED);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Edit course by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "202", description = "Accepted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
+                            schema = @Schema(implementation = CourseReadDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request, Error as result of sending invalid ID",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+            @ApiResponse(responseCode = "406", description = "Not acceptable, Error as result of sending invalid data, Ex: 'ID curso incorrecto' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PutMapping("{id}")
     // @PreAuthorize(hasRole("admin") orhasPrivil("read"))
     public ResponseEntity<CourseReadDto> editCourseById(@PathVariable Integer id, @RequestBody CourseAddDto courseAddDto ) {
         return new ResponseEntity<>(courseService.editCourseById(id,courseAddDto), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Delete course by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "202", description = "Accepted",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
+                            schema = @Schema(implementation = CourseReadDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request, Error as result of sending invalid ID",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "404", description = "Curso no encontrado por ID: id",
                     content = @Content) })
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteCourseById(@PathVariable Integer id) {
-        courseService.deleteCourseById(id);
-        return new ResponseEntity<>("Curso eliminado!", HttpStatus.ACCEPTED);
+    public ResponseEntity<CourseReadDto> deleteCourseById(@PathVariable Integer id) {
+        return new ResponseEntity<>(courseService.deleteCourseById(id), HttpStatus.ACCEPTED);
     }
 
 }

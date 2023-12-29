@@ -6,9 +6,11 @@ import com.example.JAM23.demo.exception.customsExceptions.InvalidValueException;
 import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -42,9 +44,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionMessages> handlerArgException (IllegalArgumentException ex){
         return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.ILLEGAL_ARGS.ordinal()) , HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionMessages> accessDeniedEx(AccessDeniedException ex){
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage() , InternalExceptionCodes.ACCESS_DENIED.ordinal()),  HttpStatus.FORBIDDEN );
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionMessages> runtimeException (RuntimeException ex){
-        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.RUNTIME_EXCEPTIONS.ordinal()) , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.ACCESS_DENIED.ordinal()) , HttpStatus.BAD_REQUEST);
     }
 
 }

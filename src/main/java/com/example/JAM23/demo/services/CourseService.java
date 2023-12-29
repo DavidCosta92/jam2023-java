@@ -68,6 +68,9 @@ public class CourseService {
         }
     }
     public CourseReadDto editCourseById(Integer idCourse, CourseAddDto course){
+
+        validator.existCourseById(idCourse);
+
         Integer idTeacher = course.getIdTeacher();
         String name = course.getName();
         Integer duration = course.getDuration();
@@ -96,7 +99,14 @@ public class CourseService {
         return courseMapper.courseEntityTOCourseReadDto(bdEntity.get());
     }
 
-    public void deleteCourseById (Integer id){
-        courseRepository.deleteById(id);
+    public CourseReadDto deleteCourseById (Integer idCourse){
+        validator.existCourseById(idCourse);
+        Optional<CourseEntity> courseToDelete = courseRepository.findById(idCourse);
+        if (courseToDelete.isPresent()){
+            courseRepository.deleteById(idCourse);
+            return courseMapper.courseEntityTOCourseReadDto(courseToDelete.get());
+        }else{
+            throw new NotFoundException("Curso no encontrado por ID: "+idCourse);
+        }
     }
 }

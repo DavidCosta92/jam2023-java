@@ -5,6 +5,7 @@ import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.auth.UserRepository;
 import com.example.JAM23.demo.exception.customsExceptions.AlreadyExistException;
 import com.example.JAM23.demo.exception.customsExceptions.InvalidValueException;
+import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionAddDto;
 import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
 import com.example.JAM23.demo.repositories.CourseRepository;
@@ -146,4 +147,11 @@ public class Validator {
             throw new InvalidValueException("ID inscripcion incorrecto");
         }
     }
+    public void alreadyExistInscription (InscriptionAddDto addDto){
+        InscriptionEntity insc = inscriptionRepository.findByIdsCourseAndUser(addDto.getId_course() , addDto.getId_user());
+        if(insc != null){
+            throw new AlreadyExistException("Inscripcion ya existe!");
+        }
+    }
+
 }

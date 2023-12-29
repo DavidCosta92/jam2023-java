@@ -58,6 +58,7 @@ public class InscriptionService {
     public InscriptionReadDto createInscription(InscriptionAddDto addDto){
         validator.existUserById(addDto.getId_user());
         validator.existCourseById(addDto.getId_course());
+        validator.alreadyExistInscription(addDto);
         return Optional
                 .ofNullable(addDto)
                 .map(add -> inscriptionMapper.inscriptionAddDtoToEntity(addDto))
@@ -106,6 +107,7 @@ public class InscriptionService {
     public InscriptionReadDto editInscriptionById(Integer idInscription , InscriptionAddDto inscriptionAddDto){
         Integer id_user = inscriptionAddDto.getId_user();
         Integer id_course = inscriptionAddDto.getId_course();
+
         Optional<InscriptionEntity> inscriptionEntity = inscriptionRepository.findById(idInscription);
 
         if(inscriptionEntity.isPresent()){
@@ -120,6 +122,8 @@ public class InscriptionService {
                 inscriptionEntity.get().setCourse(course);
             }
             inscriptionRepository.save(inscriptionEntity.get());
+        } else {
+            throw new NotFoundException("Inscripcion no encontrada con ID: " + idInscription);
         }
         return inscriptionMapper.inscriptionEntityTOInscriptionReadDto(inscriptionEntity.get());
     }
