@@ -38,6 +38,9 @@ public class CourseService {
         validator.emptyString("Name", courseAddDto.getName());
         validator.emptyString("Description", courseAddDto.getDescription());
 
+        validator.existTeacherById(courseAddDto.getIdTeacher());
+        validator.alreadyExistCourseByName(courseAddDto.getName());
+
         return Optional
                 .ofNullable(courseAddDto)
                 .map(addDto -> courseMapper.courseAddDtoTOCourseEntity(addDto))

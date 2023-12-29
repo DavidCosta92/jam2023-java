@@ -54,15 +54,17 @@ public class CourseController {
         return new ResponseEntity<>(courseService.showCourseById(id), HttpStatus.OK);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Creates course")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "201", description = "Created",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = CourseReadDto.class)) }),
+            @ApiResponse(responseCode = "406", description = "Not acceptable, Error as result of sending invalid data, Ex: 'ID profesor incorrecto' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "409", description = "Conflict, Error as result of sending data already reported, Ex: 'Ya existe curso con el nombre matematica III' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PostMapping
     public ResponseEntity<CourseReadDto> createCourse( @RequestBody CourseAddDto courseAddDto ) {
         return new ResponseEntity<>(courseService.createCourse(courseAddDto), HttpStatus.CREATED);

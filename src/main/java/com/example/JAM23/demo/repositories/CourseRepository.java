@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<CourseEntity, Integer> {
@@ -16,6 +17,8 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Integer> {
             "    JOIN course ON course.id = inscription.id_course_fk\n" +
             "    WHERE user.username = ?;", nativeQuery = true)
     List<CourseEntity> findAllCoursesInscripted(String username);
+
+    Optional<CourseEntity> findByName(String courseName);
 
 /*
     @Query(value = "SELECT course.id_user_fk WHERE course.id_course_fK = ?", nativeQuery = true)

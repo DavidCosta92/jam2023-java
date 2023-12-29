@@ -39,7 +39,7 @@ public class SecurityConfig {
                         //.requestMatchers(HttpMethod.GET,"/course/**").hasAnyAuthority(Permission.READ_COURSES.name())
                         //.requestMatchers("/course/**").permitAll()
                         //.requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()//.authenticated()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

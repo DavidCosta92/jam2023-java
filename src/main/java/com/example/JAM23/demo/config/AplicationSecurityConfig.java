@@ -1,6 +1,7 @@
 package com.example.JAM23.demo.config;
 
 import com.example.JAM23.demo.auth.UserRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
@@ -39,5 +42,22 @@ public class AplicationSecurityConfig {
         return username -> userRepository.findByUsername(username)
                     .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
+
+/*
+// todo para permitir cors de determinado origen
+// todo para permitir cors de determinado origen
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(@NotNull CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+                        .allowCredentials(true);
+            }
+        };
+    }
+ */
 
 }

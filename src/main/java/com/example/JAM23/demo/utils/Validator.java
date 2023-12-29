@@ -117,7 +117,7 @@ public class Validator {
 
     public void existTeacherById(Integer idTeacher){
         Optional<User> user = userRepository.findById(idTeacher);
-        if(! user.isPresent() || !user.get().getRole().equals("TEACHER") ){
+        if(! user.isPresent() || user.get().getRole().name() != "TEACHER" ){
             throw new InvalidValueException("ID profesor incorrecto");
         }
     }
@@ -132,6 +132,12 @@ public class Validator {
         Optional<CourseEntity> course = courseRepository.findById(idCourse);
         if(! course.isPresent() ){
             throw new InvalidValueException("ID curso incorrecto");
+        }
+    }
+    public void alreadyExistCourseByName(String courseName){
+        Optional<CourseEntity> course = courseRepository.findByName(courseName);
+        if(course.isPresent() ){
+            throw new AlreadyExistException("Ya existe curso con el nombre "+courseName);
         }
     }
     public void existInscriptionById(Integer idInscription){
