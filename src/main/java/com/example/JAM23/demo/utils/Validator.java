@@ -5,9 +5,12 @@ import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.auth.UserRepository;
 import com.example.JAM23.demo.exception.customsExceptions.AlreadyExistException;
 import com.example.JAM23.demo.exception.customsExceptions.InvalidValueException;
+import com.example.JAM23.demo.model.dtos.attendances.AttendanceDto;
 import com.example.JAM23.demo.model.dtos.inscriptions.InscriptionAddDto;
+import com.example.JAM23.demo.model.entities.AttendanceEntity;
 import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.model.entities.InscriptionEntity;
+import com.example.JAM23.demo.repositories.AttendanceRepository;
 import com.example.JAM23.demo.repositories.CourseRepository;
 import com.example.JAM23.demo.repositories.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ public class Validator {
     private CourseRepository courseRepository;
     @Autowired
     private InscriptionRepository inscriptionRepository;
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
 
     // **************************** VALIDACION DATOS PUROS **************************************************************
@@ -151,6 +156,13 @@ public class Validator {
         InscriptionEntity insc = inscriptionRepository.findByIdsCourseAndUser(addDto.getId_course() , addDto.getId_user());
         if(insc != null){
             throw new AlreadyExistException("Inscripcion ya existe!");
+        }
+    }
+
+    public void alreadyExistAttendance (AttendanceDto attendanceDto){
+        AttendanceEntity att = attendanceRepository.findByDateAndInsc(attendanceDto.getDate().toString() , attendanceDto.getId_inscription());
+        if(att != null){
+            throw new AlreadyExistException("Asitencia para la Inscripcion: "+attendanceDto.getId_inscription()+", con fecha: "+attendanceDto.getDate()+", ya existe!");
         }
     }
 

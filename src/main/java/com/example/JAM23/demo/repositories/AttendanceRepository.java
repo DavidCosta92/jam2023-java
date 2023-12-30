@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<AttendanceEntity, Integer> {
-
     @Query(value = "SELECT att.id_att , att.date, att.present, att.inscription_id_insc FROM attendance att WHERE att.inscription_id_insc = ?;", nativeQuery = true)
     List<AttendanceEntity> findAttendanceListByIdInsc (Integer idInsc); // findByInscription_id_insc
+
+    @Query(value = "SELECT att.id_att , att.date, att.present, att.inscription_id_insc FROM attendance att WHERE (att.date = ? AND att.inscription_id_insc = ?);", nativeQuery = true )
+    AttendanceEntity findByDateAndInsc(String date , Integer idInsc);
 }

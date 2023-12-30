@@ -30,7 +30,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @Operation(summary = "Shows courses, requires a valid JWT")
+    @Operation(summary = "Shows courses, requires a valid JWT with READ_COURSES permission")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List with all the courses",
                     content = { @Content(mediaType = "application/json",
@@ -41,7 +41,7 @@ public class CourseController {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Shows course by ID, requires a valid JWT")
+    @Operation(summary = "Shows course by ID, requires a valid JWT with READ_COURSES permission")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Course by ID",
                     content = { @Content(mediaType = "application/json",
@@ -52,11 +52,12 @@ public class CourseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('READ_COURSES')")
     public ResponseEntity<CourseReadDto> showCourseById(@PathVariable Integer id) {
         return new ResponseEntity<>(courseService.showCourseById(id), HttpStatus.OK);
     }
 
-    @Operation(summary = "Creates course")
+    @Operation(summary = "Creates course, requires a valid JWT with role ADMIN or TEACHER")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created",
                     content = { @Content(mediaType = "application/json",
@@ -68,11 +69,12 @@ public class CourseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public ResponseEntity<CourseReadDto> createCourse( @RequestBody CourseAddDto courseAddDto ) {
         return new ResponseEntity<>(courseService.createCourse(courseAddDto), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Edit course by ID")
+    @Operation(summary = "Edit course by ID, requires a valid JWT with role ADMIN or TEACHER")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Accepted",
                     content = { @Content(mediaType = "application/json",
@@ -83,12 +85,13 @@ public class CourseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     // @PreAuthorize(hasRole("admin") orhasPrivil("read"))
     public ResponseEntity<CourseReadDto> editCourseById(@PathVariable Integer id, @RequestBody CourseAddDto courseAddDto ) {
         return new ResponseEntity<>(courseService.editCourseById(id,courseAddDto), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "Delete course by ID")
+    @Operation(summary = "Delete course by ID, requires a valid JWT with role ADMIN or TEACHER")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Accepted",
                     content = { @Content(mediaType = "application/json",
@@ -98,6 +101,7 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Curso no encontrado por ID: id",
                     content = @Content) })
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public ResponseEntity<CourseReadDto> deleteCourseById(@PathVariable Integer id) {
         return new ResponseEntity<>(courseService.deleteCourseById(id), HttpStatus.ACCEPTED);
     }

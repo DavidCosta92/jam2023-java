@@ -31,12 +31,11 @@ public class AttendanceService {
     private AttendanceRepository attendanceRepository;
 
     @Autowired
-    private InscriptionRepository inscriptionRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private InscriptionService inscriptionService;
     @Autowired
     private  InscriptionMapper inscriptionMapper;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -50,52 +49,48 @@ public class AttendanceService {
 
     public List<UserAttendanceListDto> getUserAttendanceListByIdCourse (Integer idCourse){
         List <UserAttendanceListDto> usersAttendanceList = new ArrayList<>();
-        List <User> usersInscripted = userRepository.findAllInscriptedUsersIdByIdCourse(idCourse);
+        List <UserReadDto> usersInscripted = userService.findAllInscriptedUsersIdByIdCourse(idCourse);
 
         if(usersInscripted.size() > 0){
             for (int i = 0; i< usersInscripted.size(); i++){
                 List<AttendanceDto> attendanceList = getListAttendanceUserByIds(idCourse , usersInscripted.get(i).getId());
-                UserAttendanceListDto userAttendanceListDto = new UserAttendanceListDto( userMapper.userEntityTOUserReadDto(usersInscripted.get(i)) , attendanceList);
+                UserAttendanceListDto userAttendanceListDto = new UserAttendanceListDto( usersInscripted.get(i) , attendanceList);
                 usersAttendanceList.add(userAttendanceListDto);
             }
         }
         return usersAttendanceList;
     }
     public AttendanceDto setAttendance (AttendanceDto attendanceDto){
-        validator.existInscriptionById(attendanceDto.getId_inscription());
-        validator.validateAttendanceDate(attendanceDto.getDate());
-
-        // si viene sin ID, asumimos que es un nuevo registro, se pone presente true
         if(attendanceDto.getId_att() == null){
+            // si viene sin ID, asumimos que es un nuevo registro, se pone presente true, valida datos, los guarda y devuelve
+            validator.alreadyExistAttendance(attendanceDto);
+            validator.existInscriptionById(attendanceDto.getId_inscription());
+            validator.validateAttendanceDate(attendanceDto.getDate());
             attendanceDto.setPresent(true);
             AttendanceEntity attendanceEntity = attendanceMapper.attendanceDtoToAttendanceEntity(attendanceDto);
             attendanceRepository.save(attendanceEntity);
+            return attendanceMapper.attendanceEntityToAttendanceDto(attendanceEntity);
         } else{
-            // si viene con ID, y en BD es false, lo cambiamos a true o viceversa
+            // si viene con ID, Solo se cambia el estado del presente, pero el resto de datos no! y en BD es false, lo cambiamos a true o viceversa
             Optional <AttendanceEntity> attendanceBD = attendanceRepository.findById(attendanceDto.getId_att());
             if (attendanceBD.isPresent()){
                 boolean newStatus = attendanceBD.get().isPresent() == true? false : true;
                 attendanceBD.get().setPresent(newStatus);
                 attendanceRepository.save(attendanceBD.get());
+                AttendanceEntity attendance = attendanceRepository.findById(attendanceDto.getId_att()).get();
+                return attendanceMapper.attendanceEntityToAttendanceDto(attendance);
             } else {
-                // si viene con ID, pero no se encuetra error not found
-                // TODO tirar error
                 throw new NotFoundException("ID de asistencia no encontrado");
             }
         }
-        AttendanceEntity attendance = attendanceRepository.findById(attendanceDto.getId_att()).get();
-        return attendanceMapper.attendanceEntityToAttendanceDto(attendance);
     }
     public List<AttendanceDto> getListAttendanceUserByIds (Integer idCourse, Integer idUser){
         List<AttendanceDto> attendanceDtoList = new ArrayList<AttendanceDto>();
-        // obtener el id de iscripcion en base al id de ususario
-        Integer id_insc = inscriptionRepository.findByIdsCourseAndUser(idCourse , idUser).getId_insc();
-        if (id_insc > 0){
-            // si existe, obtener todos las asistencias basandas en el id de inscripcion
-            List<AttendanceEntity> attendanceEntitiesList = attendanceRepository.findAttendanceListByIdInsc(id_insc);
-            for (int i =0; i < attendanceEntitiesList.size() ; i++){
-                attendanceDtoList.add(attendanceMapper.attendanceEntityToAttendanceDto(attendanceEntitiesList.get(i)));
-            }
+        // obtener el id de iscripcion en base al id de ususario y curso
+        Integer id_insc = inscriptionService.getIdInscriptionByIdsCourseAndUser(idCourse , idUser);
+        List<AttendanceEntity> attendanceEntitiesList = attendanceRepository.findAttendanceListByIdInsc(id_insc);
+        for (int i =0; i < attendanceEntitiesList.size() ; i++){
+            attendanceDtoList.add(attendanceMapper.attendanceEntityToAttendanceDto(attendanceEntitiesList.get(i)));
         }
         return attendanceDtoList;
     }

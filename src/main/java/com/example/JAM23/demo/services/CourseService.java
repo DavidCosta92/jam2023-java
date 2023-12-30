@@ -60,10 +60,12 @@ public class CourseService {
         return allCourses;
     }
     public CourseReadDto showCourseById (Integer idCourse){
-        Optional<CourseEntity> course = courseRepository.findById(idCourse);
-        if(course.isPresent()){
-            return courseMapper.courseEntityTOCourseReadDto(course.get());
-        } else{
+        return courseMapper.courseEntityTOCourseReadDto(getCourseById(idCourse));
+    }
+    public CourseEntity getCourseById(Integer idCourse){
+        try {
+           return courseRepository.findById(idCourse).get();
+        }catch (Exception e){
             throw new NotFoundException("Curso no encontrado por ID: "+idCourse);
         }
     }
@@ -100,13 +102,26 @@ public class CourseService {
     }
 
     public CourseReadDto deleteCourseById (Integer idCourse){
-        validator.existCourseById(idCourse);
         Optional<CourseEntity> courseToDelete = courseRepository.findById(idCourse);
         if (courseToDelete.isPresent()){
             courseRepository.deleteById(idCourse);
             return courseMapper.courseEntityTOCourseReadDto(courseToDelete.get());
         }else{
             throw new NotFoundException("Curso no encontrado por ID: "+idCourse);
+        }
+    }
+
+    public List<CourseReadDto> findAllCoursesInscriptedByUsername( String username){
+        if(validator.existUserByUsername(username)){
+            List<CourseEntity> coursesEntities = courseRepository.findAllCoursesInscripted(username);
+            List<CourseReadDto> courseReadDtos = new ArrayList<>();
+
+            for(int i =0; i < coursesEntities.size() ; i++){
+                courseReadDtos.add(courseMapper.courseEntityTOCourseReadDto(coursesEntities.get(i)));
+            }
+            return courseReadDtos;
+        } else {
+            throw new NotFoundException("Usuario no ecnontrado con username: "+username);
         }
     }
 }

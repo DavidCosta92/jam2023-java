@@ -34,12 +34,13 @@ public class SecurityConfig {
                 //.headers().httpStrictTransportSecurity().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/docs/swagger-ui/**").permitAll()
+                        .requestMatchers("/docs/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
                         //.requestMatchers("/course/**").hasAnyRole(Role.ADMIN.name() , Role.TEACHER.name())
                         //.requestMatchers(HttpMethod.GET,"/course/**").hasAnyAuthority(Permission.READ_COURSES.name())
                         //.requestMatchers("/course/**").permitAll()
                         //.requestMatchers("/inscription/**").permitAll()
-                        .anyRequest().authenticated() // .permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sesionMan->
                         sesionMan.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

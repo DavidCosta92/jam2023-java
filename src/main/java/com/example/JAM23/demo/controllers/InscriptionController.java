@@ -28,17 +28,11 @@ import java.util.List;
 public class InscriptionController {
     private final InscriptionService inscriptionService;
 
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-    // TODO REVISAR VALIDACIONES PREVIAS, POR EJEMPLO LAS CLAVES FORANEAS DEBEN RESPETAR QUE EXISTAN LOS CURSOS Y LOS USERS
-
-
     @Operation(summary = "Shows inscriptions, requires a valid JWT with ADMIN ROL")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List with all the inscriptions",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceDto.class)) }),
+                            schema = @Schema(implementation = InscriptionReadDto.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden, Access Denied",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
@@ -85,16 +79,16 @@ public class InscriptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit inscription by ID",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
+                            schema = @Schema(implementation = InscriptionReadDto.class)) }),
             @ApiResponse(responseCode = "403", description = "Forbidden, Access Denied",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
             @ApiResponse(responseCode = "406", description = "Not acceptable, Error as result of sending invalid data, Ex: 'ID curso incorrecto' ",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
             @ApiResponse(responseCode = "404", description = "Not found ",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }) })
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PutMapping("{idInscription}")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('TEACHER')")
     public ResponseEntity<InscriptionReadDto> editInscriptionById(@PathVariable Integer idInscription,
@@ -102,46 +96,51 @@ public class InscriptionController {
         return new ResponseEntity<>(inscriptionService.editInscriptionById(idInscription , inscriptionAddDto), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Delete inscription by ID, requires a valid JWT with role ADMIN")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "202", description = "Delete inscription by ID",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = InscriptionReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @DeleteMapping("{idInscription}")
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('TEACHER')")
-    public ResponseEntity<String> deleteInscriptionById(@PathVariable Integer idInscription) {
-        inscriptionService.deleteInscriptionById(idInscription);
-        return new ResponseEntity<>("Inscripcion eliminada!", HttpStatus.ACCEPTED);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<InscriptionReadDto> deleteInscriptionById(@PathVariable Integer idInscription) {
+        return new ResponseEntity<InscriptionReadDto>(inscriptionService.deleteInscriptionById(idInscription), HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Returns all inscriptions for one specific user, requires a valid JWT with role ADMIN or TEACHER")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "200", description = "List with all the inscriptions for one user",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = InscriptionReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @GetMapping("user/{username}")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('TEACHER')")
     public ResponseEntity<List<CourseReadDto>> findAllInscriptions(@PathVariable String username) {
         return new ResponseEntity<>(inscriptionService.findAllCoursesInscriptedByUsername(username), HttpStatus.OK);
     }
 
-    @Operation(summary = ">>>>> PENDIENTE <<<<<")
+    @Operation(summary = "Returns all inscriptions for one specific course, requires a valid JWT with role ADMIN or TEACHER")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "===== PENDIENTE =====",
+            @ApiResponse(responseCode = "200", description = "List with all the inscriptions for one course",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AttendanceEntity.class)) }),
-            @ApiResponse(responseCode = "400", description = "===== PENDIENTE =====",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "===== PENDIENTE =====",
-                    content = @Content) })
+                            schema = @Schema(implementation = InscriptionReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Forbidden, Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @GetMapping("course/{idCourse}")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('TEACHER')")
     public ResponseEntity<List<UserReadDto>> findAllInscriptedUsersByIdCourse(@PathVariable Integer idCourse) {
