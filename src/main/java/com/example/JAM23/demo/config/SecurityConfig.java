@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**").permitAll()
                         //.requestMatchers("/course/**").hasAnyRole(Role.ADMIN.name() , Role.TEACHER.name())
                         //.requestMatchers(HttpMethod.GET,"/course/**").hasAnyAuthority(Permission.READ_COURSES.name())
-                        //.requestMatchers("/course/**").permitAll()
+                        .requestMatchers("/course/").permitAll()
                         //.requestMatchers("/inscription/**").permitAll()
                         .anyRequest().authenticated()
                 )

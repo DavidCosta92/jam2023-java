@@ -36,7 +36,7 @@ public class CourseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CourseReadDto.class)) }) })
     @GetMapping
-    @PreAuthorize("hasAuthority('READ_COURSES')") //@Secured({ "ADMIN", "TEACHER" })
+    //@PreAuthorize("hasAuthority('READ_COURSES')") @Secured({ "ADMIN", "TEACHER" })
     public ResponseEntity<List<CourseReadDto>> showAllCourses() {
         return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
     }

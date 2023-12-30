@@ -77,6 +77,17 @@ public class AuthService {
         // TODO GENDER DEBERIA SER UN ENUM ??
         String req_gender = request.getGender();
 
+        Role role = Role.USER;
+
+        switch (req_email){
+            case "admin@gmail.com":
+                role = Role.ADMIN;
+                break;
+            case "profe@gmail.com":
+                role = Role.TEACHER;
+                break;
+        }
+
         User user = new User().builder()
                         .username(req_username)
                         .password(passwordEncoder.encode(req_password))
@@ -86,7 +97,7 @@ public class AuthService {
                         .dni(req_dni)
                         .email(req_email)
                         .gender(req_gender)
-                        .role(Role.USER)
+                        .role(role)
                         .build();
         userRepository.save(user);
 
