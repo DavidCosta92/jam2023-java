@@ -24,7 +24,9 @@ public class DemoApplication {
 								"Aplicacion desplegada en Railway\n" +
 								"\n" +
 								"Repositorio => https://github.com/DavidCosta92/jam2023-java\n" +
+								"\n" +
 								"Documentacion => https://tense-receipt-production.up.railway.app/docs/swagger-ui/index.html\n" +
+								"\n" +
 								"Deploy de Api => https://tense-receipt-production.up.railway.app/course/")
 						.summary("Deploy: https://tense-receipt-production.up.railway.app/course/")
 						.contact(new Contact().email("davidcst2991@gmail.com").name("Costa david").url("https://www.linkedin.com/in/david-costa-yafar/")));
