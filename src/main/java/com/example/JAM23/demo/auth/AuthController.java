@@ -34,7 +34,8 @@ public class AuthController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = AuthResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad credentials",
-                    content = @Content) })
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
     @PostMapping ("login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
         return new ResponseEntity(authService.login(request) , HttpStatus.OK);

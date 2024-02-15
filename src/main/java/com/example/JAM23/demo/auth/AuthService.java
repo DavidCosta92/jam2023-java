@@ -49,7 +49,20 @@ public class AuthService {
 //  MANEJAR USUARIOS BLOQUEADOS, Deberiamos ver que es mejor, tal vez, la forma mas eficiente,
 //  es por roles? tipo rol BLOQUED_USER?
 
-
+    public Role createRoleByEmail ( String email){
+        Role role = null;
+        switch (email){
+            case "admin@gmail.com":
+                role = Role.ADMIN;
+                break;
+            case "profe@gmail.com":
+                role = Role.TEACHER;
+                break;
+            default:
+                role = Role.USER;
+        }
+        return role;
+    }
     public AuthResponse login(LoginRequest request) {
         //Authentica al usuario, osea lo guarda el contex security holder, dentro de un obj que representa el usuario logueado
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername() , request.getPassword()));
@@ -77,16 +90,6 @@ public class AuthService {
         // TODO GENDER DEBERIA SER UN ENUM ??
         String req_gender = request.getGender();
 
-        Role role = Role.USER;
-
-        switch (req_email){
-            case "admin@gmail.com":
-                role = Role.ADMIN;
-                break;
-            case "profe@gmail.com":
-                role = Role.TEACHER;
-                break;
-        }
 
         User user = new User().builder()
                         .username(req_username)
@@ -97,7 +100,7 @@ public class AuthService {
                         .dni(req_dni)
                         .email(req_email)
                         .gender(req_gender)
-                        .role(role)
+                        .role(createRoleByEmail(req_email))
                         .build();
         userRepository.save(user);
 

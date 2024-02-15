@@ -30,9 +30,4 @@ public class CourseMapper {
                     })
                 .orElse(new CourseEntity());
     }
-    private Integer id;
-    private Integer idTeacher;
-    private String name;
-    private Integer duration;
-    private String description;
 }

@@ -19,8 +19,14 @@ public class DemoApplication {
 				.info(new Info()
 						.title("JAM 2023 - Academia")
 						.version("1.0")
-						.description("MODIFICAR =>  Backend creado en Java 17, Springboot 3 y MySql, para sistema de alumnos................")
-						.summary("MODIFICAR =>  PONER URL DESPLIEGUE, AVERIGUAR COMO PONER MAS DE UN CONTACTO")
+						.description("Aplicación web, para la gestión de inscripciones, asistencias y usuarios académicos, como parte del evento JAM 2023 para crear soluciones de software gratuitas para emprendedores. A partir de una problemática propuesta, se analizó posibles soluciones que llevaron a diseñar e implementar un MVP, usando Java, Spring, Spring security, MySQL, PostgreSQL, React Js, Swagger, Figma, Github, Notion, etc.\n" +
+								"\n" +
+								"Aplicacion desplegada en Railway\n" +
+								"\n" +
+								"Repositorio => https://github.com/DavidCosta92/jam2023-java\n" +
+								"Documentacion => https://tense-receipt-production.up.railway.app/docs/swagger-ui/index.html\n" +
+								"Deploy de Api => https://tense-receipt-production.up.railway.app/course/")
+						.summary("Deploy: https://tense-receipt-production.up.railway.app/course/")
 						.contact(new Contact().email("davidcst2991@gmail.com").name("Costa david").url("https://www.linkedin.com/in/david-costa-yafar/")));
 	}
 

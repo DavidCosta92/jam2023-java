@@ -59,7 +59,7 @@ public class JwtService {
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")){
             return authHeader.substring(7);
         }else{
-            throw new InvalidJwtException("JWT not found");
+            return null; // ==> aca debe retornar null, sino corto cadena de filtros! por eso no usar throw new InvalidJwtException("JWT not found");
         }
     }
     public String getTokenFromHeader(HttpHeaders headers) {
