@@ -3,6 +3,7 @@ package com.example.JAM23.demo.controllers;
 import com.example.JAM23.demo.auth.User.User;
 import com.example.JAM23.demo.exception.ExceptionMessages;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
+import com.example.JAM23.demo.model.dtos.courses.CourseListReadDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.model.entities.AttendanceEntity;
 import com.example.JAM23.demo.services.CourseService;
@@ -37,8 +38,10 @@ public class CourseController {
                             schema = @Schema(implementation = CourseReadDto.class)) }) })
     @GetMapping
     //@PreAuthorize("hasAuthority('READ_COURSES')") @Secured({ "ADMIN", "TEACHER" })
-    public ResponseEntity<List<CourseReadDto>> showAllCourses() {
-        return new ResponseEntity<>(courseService.showAllCourses(), HttpStatus.OK);
+    public ResponseEntity<CourseListReadDto> showAllCourses(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                            @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                            @RequestParam(required = false, defaultValue = "name") String sortBy) {
+        return new ResponseEntity<>(courseService.showAllCourses(page, size, sortBy), HttpStatus.OK);
     }
 
     @Operation(summary = "Shows course by ID, requires a valid JWT with READ_COURSES permission")

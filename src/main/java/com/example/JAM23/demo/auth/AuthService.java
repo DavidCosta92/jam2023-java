@@ -112,14 +112,10 @@ public class AuthService {
     }
     public LoguedUserDetails getLoguedUserDetails (HttpHeaders headers){
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        String token = jwtService.getTokenFromHeader(headers);
         User loguedUser = (User) securityContext.getAuthentication().getPrincipal();
-
-        System.out.print("****** loguedUser From Context >>> "+loguedUser.getUsername()+" <<<");
 
         return new LoguedUserDetails()
                 .builder()
-                .token(token)
                 .id(loguedUser.getId())
                 .username(loguedUser.getUsername())
                 .firstName(loguedUser.getFirstName())

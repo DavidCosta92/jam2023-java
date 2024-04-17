@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 
 public class LoguedUserDetails {
-    String token;
     Integer id;
     String username;
     String lastName;

@@ -3,11 +3,16 @@ package com.example.JAM23.demo.services;
 import com.example.JAM23.demo.exception.customsExceptions.NotFoundException;
 import com.example.JAM23.demo.mappers.CourseMapper;
 import com.example.JAM23.demo.model.dtos.courses.CourseAddDto;
+import com.example.JAM23.demo.model.dtos.courses.CourseListReadDto;
 import com.example.JAM23.demo.model.dtos.courses.CourseReadDto;
 import com.example.JAM23.demo.model.entities.CourseEntity;
 import com.example.JAM23.demo.repositories.CourseRepository;
 import com.example.JAM23.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,16 +53,20 @@ public class CourseService {
                 .map(courseEntity -> courseMapper.courseEntityTOCourseReadDto(courseEntity))
                 .orElse(new CourseReadDto()); //.orElseThrow(()->new RuntimeException("Error creando cruso?"));
     }
-    public List<CourseReadDto> showAllCourses (){
-        List<CourseReadDto> allCourses = new ArrayList<>();
-        List<CourseEntity> allCoursesEntity = courseRepository.findAll();
-        if (allCoursesEntity.size()>0){
-            for (int i = 0; i <allCoursesEntity.size() ; i++){
-                CourseReadDto courseDto = courseMapper.courseEntityTOCourseReadDto(allCoursesEntity.get(i));
-                allCourses.add(courseDto);
-            }
-        }
-        return allCourses;
+    public CourseListReadDto showAllCourses (Integer page, Integer size, String sortBy){
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<CourseEntity> results = courseRepository.findAll(pageable);
+
+        return CourseListReadDto.builder()
+                .courses(results.getContent())
+                .total_results(results.getTotalElements())
+                .results_per_page(size)
+                .sort_by(sortBy)
+                .pages(results.getTotalPages())
+                .current_page(page)
+                .build();
     }
     public CourseReadDto showCourseById (Integer idCourse){
         return courseMapper.courseEntityTOCourseReadDto(getCourseById(idCourse));
